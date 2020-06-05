@@ -7,7 +7,7 @@ class Background():
     def __init__(self, zeropoint, pixel_scale, aperture_f_limit, aperture_significance, aperture_radius, verbose = False):
 
         '''
-        :param zeropoint:               Observation instrument/filter AB magnitude zeropoint
+        :param zeropoint:               Observation instrument/filter AB magnitude zeropoint / Not needed for img.bkg in nJy
         :param pixel_scale:             Pixel scale (arcsec/pixel)
         :param aperture_f_limit:        Aperture flux limit (nJy) (The flux detected at aperture_significance)
         :param aperture_significance:   Aperture significance (S/N)
@@ -53,7 +53,13 @@ class Background():
         img = empty()
         img.nJy_to_es = self.nJy_to_es
         img.pixel_scale = self.pixel_scale
-        img.noise = self.pixel.noise_es * np.ones((CutoutWidth,CutoutWidth))
+        img.noise = self.pixel.noise * np.ones((CutoutWidth,CutoutWidth))
+        img.noise_es = self.pixel.noise_es * np.ones((CutoutWidth, CutoutWidth))
         img.wht = 1./img.noise**2
-        img.bkg = self.pixel.noise_es * np.random.randn(*img.noise.shape)
+
+        random_map = np.random.randn(*img.noise.shape)
+
+        img.bkg = self.pixel.noise * random_map
+        img.bkg_es = self.pixel.noise_es * random_map
+
         return img

@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-pixel_scale = 0.13              # arcsec/pixel
-aperture_radius = 10*0.175         # aperture radius in arcsec
-zeropoint = 25.946              # AB mag zeropoint
+pixel_scale = 0.031             # arcsec/pixel
+aperture_radius = 0.175         # aperture radius in arcsec
+zeropoint = 25.946              # AB mag zeropoint  / This doesn't matter if only interested in the noise background in nJy
 aperture_f_limit = 4.365        # aperture flux limit (nJy)
 
 r = aperture_radius/pixel_scale # aperture radius in pixels
@@ -55,7 +55,7 @@ plt.show()
 
 
 # Measuring photometry in the random apertures
-phot_table = aperture_photometry(img.bkg/img.nJy_to_es, aperture, method='subpixel')
+phot_table = aperture_photometry(img.bkg, aperture, method='subpixel')
 phot_table['aperture_sum'].info.format = '%.8g'
 
 print('')
